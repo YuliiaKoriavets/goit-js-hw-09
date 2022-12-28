@@ -1,5 +1,6 @@
 'use strict';
 
+import { Notify } from 'notiflix';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -19,8 +20,9 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates[0] < new Date()) {
-      window.alert(`Please choose a date in the future`);
+      Notify.failure(`Please choose a date in the future`);
       startButtonEl.disabled = true;
+      selectedDates[0] = new Date();
     } else if (selectedDates[0] > new Date()) {
       startButtonEl.disabled = false;
     }
@@ -55,8 +57,9 @@ function addLeadingZero(value) {
 let timerId = null;
 
 function handleStartTimer() {
+  startButtonEl.disabled = true;
+  dateTimePickerEl.disabled = true;
   timerId = setInterval(() => {
-    startButtonEl.disabled = true;
     const timeDifference = new Date(dateTimePickerEl.value) - new Date();
     if (timeDifference < 0) {
       return;
